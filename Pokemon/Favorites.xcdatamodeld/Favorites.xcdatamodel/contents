@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Descriptions" representedClassName="Descriptions" syncable="YES" codeGenerationType="class">
+        <attribute name="number" optional="YES" attributeType="String"/>
+        <attribute name="type1" optional="YES" attributeType="String"/>
+        <attribute name="type2" optional="YES" attributeType="String"/>
+        <attribute name="value" optional="YES" attributeType="String"/>
+        <relationship name="id" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemons"/>
+    </entity>
+    <entity name="Pokemons" representedClassName="Pokemons" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="id" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemons" inverseName="id" inverseEntity="Pokemons"/>
+    </entity>
+    <elements>
+        <element name="Descriptions" positionX="-54" positionY="-9" width="128" height="104"/>
+        <element name="Pokemons" positionX="-63" positionY="-18" width="128" height="59"/>
+    </elements>
+</model>
