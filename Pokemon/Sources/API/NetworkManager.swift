@@ -11,11 +11,11 @@ let pokemonCache = NSCache<AnyObject, AnyObject>()
 
 class NetworkManager {
     
-    func fetchPokemons(completion: @escaping ([UnitCodable]) -> Void) {
-        let urlString = "https://pokeapi.co/api/v2/pokemon/"
+    func fetchPokemons(offset: Int, completion: @escaping (PokemonListCodable) -> Void) {
+        let urlString = "https://pokeapi.co/api/v2/pokemon/?offset=\(offset)&limit=20"
         
         if let itemFromCache = pokemonCache.object(forKey: urlString as AnyObject) as? PokemonListCodable {
-            completion(itemFromCache.results)
+            completion(itemFromCache)
             return
         }
         
@@ -25,7 +25,7 @@ class NetworkManager {
             if let data = data,
                let item = try? JSONDecoder().decode(PokemonListCodable.self, from: data) {
                 pokemonCache.setObject(item as AnyObject, forKey: urlString as AnyObject)
-                completion(item.results)
+                completion(item)
             }
         }
     }
@@ -68,11 +68,8 @@ class NetworkManager {
         }
     }
     
-    private var offset = 0
-    
     private func runFetch(url: URL, completion: @escaping (Data?) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            
             if let error = error {
                 debugPrint("Error with fetching films: \(error)")
                 return
@@ -82,21 +79,9 @@ class NetworkManager {
                 debugPrint("Error with the response, unexpected status code.")
                 return
             }
-            
-            
             completion(data)
         }
         task.resume()
-    }
-    
-    private func stringWithSeek(_ src: String, seek: FetchSeek) -> String {
-        var result = ""
-        if seek == .next {
-            result = "\(src)?offset=\(offset + 20)&limit=20"
-        } else {
-            result = "\(src)?offset=\(offset - 20)&limit=20"
-        }
-        return result
     }
 }
 

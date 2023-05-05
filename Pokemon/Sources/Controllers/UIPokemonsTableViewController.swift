@@ -23,13 +23,23 @@ class UIPokemonsTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(loadData), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        
         tableView.register(UINib(nibName: "UIPokemonTableViewCell", bundle: nil), forCellReuseIdentifier: "PokemonItem")
+        loadData()
+    }
+    
+    @objc func loadData() {
+        guard let rc = refreshControl else { return }
         
         dataManager.fetchPokemons { [unowned self] d in
-            self.data = d
+            self.data.append(contentsOf: d)
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                rc.endRefreshing()
             }
         }
     }
@@ -50,7 +60,6 @@ class UIPokemonsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonItem", for: indexPath) as! UIPokemonTableViewCell
 
         NetworkManager().fetchPokemon(name: data[indexPath.row].name) { [unowned self] pokemon in
-            
             if self.pokemons.count <= indexPath.row {
                 self.pokemons[indexPath.row] = pokemon
             }
@@ -74,7 +83,6 @@ class UIPokemonsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let selectedPokemon = pokemons[indexPath.row]
 
         guard let nc = navigationController else { return }
@@ -83,8 +91,18 @@ class UIPokemonsTableViewController: UITableViewController {
         nc.pushViewController(cardVC, animated: true)
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == data.count - 1 {
+            loadData()
+        }
+    }
     
-
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonItem", for: indexPath) as! UIPokemonTableViewCell
+        cell.name.text = ""
+        cell.icon.clearImg()
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

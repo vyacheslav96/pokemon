@@ -13,16 +13,7 @@ class UIDetailInfoTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-//        addSubview(label)
         backgroundColor = UIColor.systemBackground.withAlphaComponent(0)
-        
-//        label.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-//        label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-//        label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-//        label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-//
-//        label.text = "\t\u{2022} Test"
     }
     
     required init?(coder: NSCoder) {
@@ -38,11 +29,9 @@ class UIDetailInfoTableViewCell: UITableViewCell {
         addSubview(label)
         
         label.topAnchor.constraint(equalTo: topAnchor).isActive = true
-//        label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         label.heightAnchor.constraint(equalToConstant: 30).isActive = true
         label.widthAnchor.constraint(equalToConstant: 200).isActive = true
         label.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-//        label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
 
         label.text = "\t\u{2022} \(value)"
         

@@ -15,7 +15,6 @@ class UISprite: UIView {
     let activityIndicator = UIActivityIndicatorView()
     
     func loadImageWithUrl(_ url: URL) {
-
         // setup activityIndicator...
         activityIndicator.color = .darkGray
 
@@ -30,7 +29,6 @@ class UISprite: UIView {
 
         // retrieves image if already available in cache
         if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
-
             self.layer.contents = imageFromCache.cgImage
             activityIndicator.stopAnimating()
             return
@@ -38,7 +36,6 @@ class UISprite: UIView {
 
         // image does not available in cache.. so retrieving it from url...
         URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
-
             if error != nil {
                 print(error as Any)
                 DispatchQueue.main.async(execute: {
@@ -48,7 +45,6 @@ class UISprite: UIView {
             }
 
             DispatchQueue.main.async(execute: {
-
                 if let unwrappedData = data, let imageToCache = UIImage(data: unwrappedData) {
 
                     if self.imageURL == url {
@@ -60,5 +56,9 @@ class UISprite: UIView {
                 self.activityIndicator.stopAnimating()
             })
         }).resume()
+    }
+    
+    func clearImg() {
+        layer.contents = nil
     }
 }
