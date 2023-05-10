@@ -60,8 +60,8 @@ class UIPokemonsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonItem", for: indexPath) as! UIPokemonTableViewCell
 
         NetworkManager().fetchPokemon(name: data[indexPath.row].name) { [unowned self] pokemon in
-            if self.pokemons.count <= indexPath.row {
-                self.pokemons[indexPath.row] = pokemon
+            if self.pokemons[pokemon.id] == nil {
+                self.pokemons[pokemon.id] = pokemon
             }
             
             guard let sprite = pokemon.sprites.front_default else { return }
@@ -69,6 +69,7 @@ class UIPokemonsTableViewController: UITableViewController {
             let url = URL(string: sprite)
             
             DispatchQueue.main.async {
+                cell.setId(value: pokemon.id)
                 cell.icon.loadImageWithUrl(url!)
             }
         }
@@ -83,7 +84,8 @@ class UIPokemonsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedPokemon = pokemons[indexPath.row]
+        let cell = tableView.cellForRow(at: indexPath) as! UIPokemonTableViewCell
+        let selectedPokemon = pokemons[cell.id]
 
         guard let nc = navigationController else { return }
         let cardVC = UICardViewController(nibName: "UICardViewController", bundle: nil)

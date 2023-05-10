@@ -11,6 +11,7 @@ class UIPokemonTableViewCell: UITableViewCell {
 
     @IBOutlet weak var icon: UISprite!
     @IBOutlet weak var name: UILabel!
+    private(set) var id: Int = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -21,6 +22,10 @@ class UIPokemonTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func setId(value: Int) {
+        id = value
     }
     
 }
